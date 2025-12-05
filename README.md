@@ -42,11 +42,11 @@ Install a userscript manager in your browser:
 
 ## Test userscript output after installation
 
-[certitudes.org & geocheck.org](https://coord.info/GC7EFNV)
-[geocheck.org](https://coord.info/GC7YR3J)
-[gc-apps.com](https://coord.info/GCBDJR4)
-[geochecker.com](https://coord.info/GC2PM5J)
-[geocaching.com & geocheck.org](https://coord.info/GC8HWZR)
+- [certitudes.org & geocheck.org](https://coord.info/GC7EFNV)
+- [geocheck.org](https://coord.info/GC7YR3J)
+- [gc-apps.com](https://coord.info/GCBDJR4)
+- [geochecker.com](https://coord.info/GC2PM5J)
+- [geocaching.com & geocheck.org](https://coord.info/GC8HWZR)
 
 ## Contributing
 
