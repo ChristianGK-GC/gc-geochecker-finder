@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         GC Geochecker Finder
 // @namespace    https://github.com/ChristianGK-GC/gc-geochecker-finder
-// @version      1.2.0
+// @version      1.2.1
 // @description  Finds and displays geochecker links from various domains on geocaching.com cache pages
 // @copyright    2025, ChristianGK (https://github.com/ChristianGK-GC)
 // @author       ChristianGK
@@ -40,6 +40,11 @@
             passCoords: (coords) => { return { 'coord': coords.replace(/[^NSEW0-9]/g, "") } }
         },
         'geocheck.xyz': {
+            extractParam: (url) => url.match(/gid=([a-f0-9\-]+)/i)?.[1],
+            getImageUrl: (param) => param ? `http://geocheck.xyz/geocheck_small.php?gid=${param}` : null,
+            passCoords: (coords) => { return { 'coord': coords.replace(/[^NSEW0-9]/g, "") } }
+        },
+        'geocheck.app': {
             extractParam: (url) => url.match(/gid=([a-f0-9\-]+)/i)?.[1],
             getImageUrl: (param) => param ? `http://geocheck.xyz/geocheck_small.php?gid=${param}` : null,
             passCoords: (coords) => { return { 'coord': coords.replace(/[^NSEW0-9]/g, "") } }
