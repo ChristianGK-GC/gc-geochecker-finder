@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.2.0] 
+
+- Pass final coordinates to Geochecker geocheck.org, geocheck.xyz, geotjek.dk and geochecker.com
+  
 ## [1.1.1] - 2025-12-07
 
 - Support for geocheck.xyz added
