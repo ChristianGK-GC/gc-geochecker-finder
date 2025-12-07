@@ -24,7 +24,8 @@ To add support for a new geochecker domain:
 1. Add the domain to `DOMAIN_CONFIG` in the script
 2. Implement `extractParam` function to extract the checker ID
 3. Implement `getImageUrl` function to generate the image URL
-4. Test thoroughly on actual cache pages
+4. (optional) Implement `passCoords` function to pass corrected coordinates to the service via URL search parameters
+5. Test thoroughly on actual cache pages
 
 ### Pull Requests
 

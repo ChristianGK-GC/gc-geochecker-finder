@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         GC Geochecker Finder
 // @namespace    https://github.com/ChristianGK-GC/gc-geochecker-finder
-// @version      1.1.0
+// @version      1.2.0
 // @description  Finds and displays geochecker links from various domains on geocaching.com cache pages
 // @copyright    2025, ChristianGK (https://github.com/ChristianGK-GC)
 // @author       ChristianGK
@@ -15,6 +15,9 @@
 // @grant        none
 // ==/UserScript==
 
+/* make eslint happy and avoid no-undef warnings: */
+/* global userDefinedCoords */
+
 (function () {
     'use strict';
 
@@ -24,19 +27,22 @@
     const DOMAIN_CONFIG = {
         'certitudes.org': {
             extractParam: (url) => url.match(/wp=([A-Z0-9]+)/i)?.[1],
-            getImageUrl: (param) => param ? `https://www.certitudes.org/logo?wp=${param}` : null
+            getImageUrl: (param) => param ? `https://www.certitudes.org/logo?wp=${param}` : null,
         },
         'geocheck.org': {
             extractParam: (url) => url.match(/gid=([a-f0-9\-]+)/i)?.[1],
-            getImageUrl: (param) => param ? `http://geocheck.org/geocheck_small.php?gid=${param}` : null
+            getImageUrl: (param) => param ? `http://geocheck.org/geocheck_small.php?gid=${param}` : null,
+            passCoords: (coords) => { return { 'coord': coords.replace(/[^NSEW0-9]/g, "") } }
         },
         'geotjek.dk': {
             extractParam: (url) => url.match(/gid=([a-f0-9\-]+)/i)?.[1],
-            getImageUrl: (param) => param ? `http://geotjek.dk/geocheck_small.php?gid=${param}` : null
+            getImageUrl: (param) => param ? `http://geotjek.dk/geocheck_small.php?gid=${param}` : null,
+            passCoords: (coords) => { return { 'coord': coords.replace(/[^NSEW0-9]/g, "") } }
         },
         'geocheck.xyz': {
             extractParam: (url) => url.match(/gid=([a-f0-9\-]+)/i)?.[1],
-            getImageUrl: (param) => param ? `http://geotjek.dk/geocheck_small.php?gid=${param}` : null
+            getImageUrl: (param) => param ? `http://geocheck.xyz/geocheck_small.php?gid=${param}` : null,
+            passCoords: (coords) => { return { 'coord': coords.replace(/[^NSEW0-9]/g, "") } }
         },
         'gc-apps.com': {
             extractParam: (url) => url.match(/\/checker\/([a-f0-9]+)/i)?.[1],
@@ -44,7 +50,8 @@
         },
         'geochecker.com': {
             extractParam: () => null,
-            getImageUrl: () => `https://www.geochecker.com/images/geochecker_title.png`
+            getImageUrl: () => `https://www.geochecker.com/images/geochecker_title.png`,
+            passCoords: (coords) => { return { 'lastcoords': coords } }
         }
     };
 
@@ -83,7 +90,23 @@
             container.querySelectorAll('a[href]').forEach(link => {
                 Object.keys(DOMAIN_CONFIG).forEach(domain => {
                     if (link.href.includes(domain)) {
-                        foundLinks[domain].add(link.href);
+                        let ref = link.href;
+
+                        // Corrected listing coordinates passed to the checker, if supported by service
+                        if ("userDefinedCoords" in window &&
+                            userDefinedCoords && userDefinedCoords.data && userDefinedCoords.data.isUserDefined &&
+                            DOMAIN_CONFIG[domain].passCoords) {
+                            let correctedCoordinates = document.getElementById("uxLatLon").textContent;
+                            let parameters = DOMAIN_CONFIG[domain].passCoords(correctedCoordinates);
+
+                            const url = new URL(ref);
+                            Object.entries(parameters).forEach(([key, value]) => {
+                                url.searchParams.append(key, value);
+                            });
+                            ref = url.toString();
+                        }
+
+                        foundLinks[domain].add(ref);
                     }
                 });
             });
