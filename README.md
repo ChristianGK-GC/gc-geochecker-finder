@@ -1,25 +1,50 @@
-# GC Geochecker Finder
+# GC External Links Finder
 
-A userscript that automatically finds and displays geochecker links on geocaching.com cache pages.
+A userscript that finds and displays external service links on geocaching.com cache pages.
 
 ---
 
 ## Overview
 
-GC Geochecker Finder is a userscript that automatically detects and displays geochecker links from various domains on geocaching.com cache pages. It creates a convenient widget that shows all found geochecker links with their associated images, making it easier to verify mystery cache solutions.
+GC External Links Finder automatically detects and displays links to various external services on geocaching.com cache pages. It creates a convenient widget organized by service categories, making it easier to access geocheckers, puzzles, and planning tools.
 
-## Supported Domains
+## Features
 
-| Domains        |                                | Pass Corrected Coordinates           |
-| :--------------| :------------------------------| :----------------------------------- |
-| certitudes.org | image link                     | no  |
-| geocheck.org   | image link                     | yes |
-| geocheck.xyz   | image link                     | yes |
-| geotjek.dk     | image link                     | yes |
-| gc-apps.com    | image link                     | no  |
-| geochecker.com | image link                     | yes |
-| gccheck.com    | text link                      | no  |
-| geocaching.com | default checker provided by HQ | yes |
+- Automatic detection of external service links
+- Organized by service categories
+- Visual representation with service logos/images
+- Passes corrected coordinates to supported geocheckers
+- Links directly to the official Geocaching.com HQ checker if available
+- Fallback to text links if images fail to load
+
+## Supported Services
+
+### ✓ Geochecker Services
+
+| Domain             | Type        | Pass Coordinates |
+|:-------------------|:------------|:-----------------|
+| certitudes.org     | Image link  | No               |
+| geocheck.org       | Image link  | Yes              |
+| geocheck.xyz       | Image link  | Yes              |
+| geocheck.app       | Image link  | Yes              |
+| geotjek.dk         | Image link  | Yes              |
+| gc-apps.com        | Image link  | No               |
+| geochecker.com     | Image link  | Yes              |
+| gccheck.com        | Text link   | No               |
+| geocaching.com     | HQ checker  | Yes              |
+
+### 🧩 Puzzle Services
+
+| Domain             | Type        |
+|:-------------------|:------------|
+| jigidi.com         | Image link  |
+
+### 🗺️ Planning & Tools
+
+| Domain                | Type        |
+|:----------------------|:------------|
+| xctrails.org          | Text link   |
+| geocache-planer.de    | Text link   |
 
 ## Installation
 
@@ -34,18 +59,29 @@ Install a userscript manager in your browser:
 ### Install the Script
 
 1. Install one of the userscript managers above
-2. Click on the following link: [Install GC Geochecker Finder](https://github.com/ChristianGK-GC/gc-geochecker-finder/raw/main/gc_geochecker_finder.user.js)
+2. Click on the following link: [Install GC External Links Finder](https://github.com/ChristianGK-GC/gc-external-links-finder/raw/main/gc_external_links_finder.user.js)
 3. Your userscript manager will prompt you to install the script
 4. Click "Install" to confirm
+
+## Migration from GC Geochecker Finder
+
+If you're upgrading from the old "GC Geochecker Finder" (v1.x):
+
+1. Install the new "GC External Links Finder" script
+2. Uninstall the old "GC Geochecker Finder" script
+3. All geochecker functionality is preserved and extended with new service categories
 
 ## Usage
 
 1. Navigate to any geocaching.com cache page
-2. The script automatically scans the page for geochecker links
-3. If geochecker links are found, a widget appears above the cache details
-4. Any geochecker link is opened in a new tab
+2. The script automatically scans the page for external service links
+3. If links are found, a widget appears above the cache details
+4. Links are organized by category (Geocheckers, Puzzles, Planning Tools)
+5. All links open in a new tab
 
 ## Test userscript output after installation
+
+### ✓ Geochecker
 
 - [certitudes.org & geocheck.org](https://coord.info/GC7EFNV)
 - [geocheck.org](https://coord.info/GC7YR3J)
@@ -56,25 +92,22 @@ Install a userscript manager in your browser:
 - [geocheck.app](https://coord.info/GC4ZRT0)
 - [geotjek.dk](https://coord.info/GC6AX4A)
 - [gccheck.com](https://coord.info/GC4CFAA)
+- [geocache-planer.de](https://coord.info/GCA6MNY)
+
+### 🧩 Puzzles
+
+- [jigidi.com](https://coord.info/GCB0332)
+- [xctrails.org (GC-Code)](https://coord.info/GC6B56W)
+- [xctrails.org (UID)](https://coord.info/GCA6VT0)
+
+### 🗺️ Planning
+
+- [geocache-planer.de](https://coord.info/GCB61M6)
 
 ## Contributing
 
-Contributions are welcome! Please feel free to:
-
-- Report bugs via [GitHub Issues](https://github.com/ChristianGK-GC/gc-geochecker-finder/issues)
-- Suggest new features or supported domains
+Contributions are welcome! See [CONTRIBUTING.md](CONTRIBUTING.md) for details.
 
 ## License
 
-This project is licensed under the **GNU General Public License v3.0**.
-
-## Author
-
-Created by [ChristianGK](https://github.com/ChristianGK-GC)
-
-## Support
-
-If you encounter any issues or have questions:
-
-- Open an issue on [GitHub](https://github.com/ChristianGK-GC/gc-geochecker-finder/issues)
-- Check existing issues for similar problems
+GNU General Public License v3.0 - see [License.md](License.md) for details.
