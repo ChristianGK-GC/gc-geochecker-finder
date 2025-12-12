@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         GC External Links Finder
 // @namespace    https://github.com/ChristianGK-GC/gc-external-links-finder
-// @version      2.0.0-alpha-4
+// @version      2.0.1
 // @description  Finds and displays external service links (geocheckers, puzzles, planning tools) on geocaching.com cache pages
 // @copyright    2025, ChristianGK (https://github.com/ChristianGK-GC)
 // @author       ChristianGK
@@ -15,21 +15,19 @@
 // @grant        none
 // ==/UserScript==
 
-
-
 (function () {
     'use strict';
 
     const SCRIPT_NAME = 'GC External Links Finder';
     const INIT_DELAY_MS = 1000;
     const MAX_IMAGE_WIDTH_PX = 200;
-    const MAX_IMAGE_HEIGHT_PX = 120;
+    const MAX_IMAGE_HEIGHT_PX = 100;
 
     // Service categories configuration
     const SERVICE_CATEGORIES = {
         geochecker: {
             name: 'Geochecker',
-            icon: '✅',
+            icon: '<span style="color:green">✓</span>',
             services: {
                 'certitudes.org': {
                     extractParam: (url) => url.match(/wp=([A-Z0-9]+)/i)?.[1],
@@ -161,7 +159,7 @@
                             // Pass corrected coordinates if supported
                             if (categoryKey === 'geochecker' &&
                                 "userDefinedCoords" in window &&
-                                userDefinedCoords?.data?.isUserDefined &&
+                                window.userDefinedCoords?.data?.isUserDefined &&
                                 config.passCoords) {
                                 const correctedCoordinates = document.getElementById("uxLatLon")?.textContent;
                                 if (correctedCoordinates) {
@@ -210,6 +208,23 @@
         return config.getImageUrl(param);
     }
 
+    function renderLinkElement(link, categoryKey, domain) {
+        const imageUrl = getImageUrl(categoryKey, domain, link);
+        const displayName = SERVICE_CATEGORIES[categoryKey].services[domain].displayName || domain;
+
+        if (imageUrl) {
+            return [
+                `<a href="${link}" target="_blank" style="display: block; margin: 5px auto; text-align: center;">`,
+                `<img src="${imageUrl}" title="${link}" style="max-width: ${MAX_IMAGE_WIDTH_PX}px; max-height: ${MAX_IMAGE_HEIGHT_PX}px; border: 0;" `,
+                `alt="${displayName}" `,
+                `onerror="this.onerror=null; this.parentElement.innerHTML='<span style=\\'display:block;padding:5px;background:#f0f0f0;border-radius:3px;text-align:center;\\'>${displayName}</span>';">`,
+                '</a>'
+            ].join('');
+        } else {
+            return `<a href="${link}" target="_blank" style="display: block; margin: 5px 0; padding: 5px; background: #f0f0f0; border-radius: 3px; text-align: left;">${displayName}</a>`;
+        }
+    }
+
     function createExternalLinksWidget(foundLinks, hasHqChecker = false) {
         const widgetParts = ['<div id="externalLinksWidget" class="CacheDetailNavigationWidget TopSpacing BottomSpacing">'];
         widgetParts.push('<h3 class="WidgetHeader">External Links</h3>');
@@ -218,7 +233,7 @@
         // Display HQ Cache Checker if available
         if (hasHqChecker) {
             widgetParts.push('<div style="margin-bottom: 15px;">');
-            widgetParts.push('<h4 style="margin: 10px 0 5px 0; font-size: 14px; font-weight: bold;">✓ Geochecker Services</h4>');
+            widgetParts.push(`<h4 style="margin: 10px 0 5px 0; font-size: 14px; font-weight: bold;">${SERVICE_CATEGORIES.geochecker.icon} ${SERVICE_CATEGORIES.geochecker.name}</h4>`);
             widgetParts.push(
                 '<a href="#ctl00_ContentBody_uxCacheChecker" style="display: block; margin: 5px 0; padding: 10px; border-radius: 3px; text-align: center; text-decoration: none;">',
                 '  <svg viewBox="0 0 196 29" class="icon-logo" role="img" aria-labelledby="GeocachingLogo" width="100%" style="fill: #02874d;">',
@@ -246,22 +261,7 @@
                     const linkArray = Array.from(links);
                     if (linkArray.length > 0) {
                         linkArray.forEach(link => {
-                            const imageUrl = getImageUrl(categoryKey, domain, link);
-                            const displayName = category.services[domain].displayName || domain;
-
-                            if (imageUrl) {
-                                widgetParts.push(
-                                    `<a href="${link}" target="_blank" style="display: block; margin: 5px auto; text-align: center;">`,
-                                    `<img src="${imageUrl}" title="${link}" style="max-width: ${MAX_IMAGE_WIDTH_PX}px; max-height: ${MAX_IMAGE_HEIGHT_PX}px; border: 0;" `,
-                                    `alt="${displayName}" `,
-                                    `onerror="this.onerror=null; this.parentElement.innerHTML='<span style=\\'display:block;padding:5px;background:#f0f0f0;border-radius:3px;text-align:center;\\'>${displayName}</span>';">`,
-                                    '</a>'
-                                );
-                            } else {
-                                widgetParts.push(
-                                    `<a href="${link}" target="_blank" style="display: block; margin: 5px 0; padding: 5px; background: #f0f0f0; border-radius: 3px; text-align: left;">${displayName}</a>`
-                                );
-                            }
+                            widgetParts.push(renderLinkElement(link, categoryKey, domain));
                         });
                     }
                 });
